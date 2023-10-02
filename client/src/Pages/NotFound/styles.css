@@ -1,0 +1,14 @@
+.not-found-button {
+    padding: 0.4rem 0.5rem;
+    margin: 1rem 0.25rem 1rem;
+    font-size: 2rem;
+    border: 2px solid var(--blue);
+    background-color: var(--sky);
+    border-radius: 0.3rem;
+    color: var(--blue);
+}
+
+.not-found-button:hover {
+    background-color: var(--purple);
+    cursor: pointer;
+}

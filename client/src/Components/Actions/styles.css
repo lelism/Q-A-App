@@ -1,0 +1,13 @@
+.action-button {
+    width: 70%;
+    margin-bottom: 0.7rem;
+    padding: 0.3rem;
+    color: var(--white);
+    border-radius: 3px;
+    background-color: var(--blue);
+}
+
+.action-button:hover {
+    cursor: pointer;
+    color: var(--sky);
+}

@@ -1,0 +1,27 @@
+.registration-page {
+    background-color: var(--white);
+    opacity: 0.95;
+}
+
+.registration-form {
+    margin: 2rem;
+    padding: 1.5rem;
+    background-color: aquamarine;
+}
+
+.signup-input {
+    margin: 0.5rem;
+    padding: 0.25rem;
+}
+
+.signup-button {
+    padding: 0.3rem 0.5rem;
+    margin: 0.5rem;
+}
+/* 
+input:invalid {
+    background-color: ivory;
+    border: none;
+    outline: 2px solid red;
+    border-radius: 5px;
+} */

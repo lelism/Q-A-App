@@ -1,0 +1,48 @@
+.login-form {
+    width: 100%;
+    flex-wrap: nowrap;
+    margin-top: 50px;
+    padding: 1.5rem;
+}
+
+.login-label {
+    font-size: 1rem;
+    margin: 0.1rem 0.25rem;
+}
+
+.login-input {
+    width: 10rem;
+    min-width: 3rem;
+    padding: 0.1rem;
+    margin: 0.1rem 0.25rem;
+}
+
+.button {
+    padding: 0.4rem 0.5rem;
+    margin: 1rem 0.25rem 1rem;
+    font-size: 1rem;
+    border-radius: 0.3rem;
+}
+
+.button:hover {
+    background-color: deepskyblue;
+    cursor: pointer;
+}
+
+.signup-link {
+    padding: 0 0.3rem;
+    font-size: 0.9rem;
+}
+
+@media screen and (max-width: 960px) {
+    .login-form {
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        padding: 0.2rem 0.3rem;
+    }
+
+    .button {
+        margin: 0.1rem 0.25rem;
+    }
+}

@@ -1,0 +1,34 @@
+.questions-page {
+    background-color: var(--white);
+    opacity: 0.95;
+    padding: 1rem;
+}
+
+.questions-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 0rem;
+    border-bottom: 3px solid #FFFFFF;
+}
+
+.selected {
+    background-color: var(--blue);
+    color: var(--white);
+}
+
+.sorting-row {
+    padding: 0.1rem 0rem 1rem;
+}
+
+.q-button {
+    min-width: 100px;
+    padding: 0.5rem;
+    color: var(--white);
+    background-color: var(--blue);
+    border: 1px solid var(--black);
+}
+
+.q-button:hover {
+    cursor: pointer;
+}

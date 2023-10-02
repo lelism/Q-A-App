@@ -1,0 +1,30 @@
+.question-form-wrapper {
+    background-color: var(--white);
+    width: 100%;
+    padding: 1rem 0.5rem 1rem 4rem; 
+}
+
+.new-answer-body {
+    width: 80%;
+    margin: 1rem;
+}
+
+.symbol-count {
+    width: 100%;
+}
+
+.answer-button {
+    padding: 0.4rem 0.5rem;
+    margin: 1rem 0.25rem 1rem;
+    border: 2px solid var(--blue);
+    background-color: var(--sky);
+    border-radius: 0.3rem;
+    color: var(--blue);
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.answer-button:hover {
+    background-color: var(--purple);
+    cursor: pointer;
+}

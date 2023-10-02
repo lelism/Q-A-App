@@ -1,0 +1,53 @@
+.user-profile {
+    padding: 1.5rem;
+}
+
+.avatar {
+    width: 100px;
+    height: 100px;
+    background-image: url("../../Images/avatars/avatar-1.jpg");
+    background-size: contain;
+    background-position: top;
+    background-repeat: no-repeat;
+    margin: 0rem 0.25rem 0.8rem;
+    border-radius: 50px;
+}
+
+.greating {
+    font-weight: bold;    
+}
+
+ul {
+    margin-top: 0.8rem;
+    margin-bottom: 1rem;
+}
+
+.stats {
+    font-size: 0.8rem;
+    padding-left: 1rem;
+    padding-top: 0.2rem;
+}
+
+.login-button {
+    padding: 0.4rem 0.5rem;
+    margin: 1rem 0.25rem 1rem;
+    font-size: 1rem;
+    border-radius: 0.3rem;
+}
+
+.login-button:hover {
+    background-color: deepskyblue;
+    cursor: pointer;
+}
+
+@media screen and (max-width: 960px) {
+    .avatar {
+        display: inline;
+        width: 2rem;
+        height: 2rem;
+    }
+
+    .button {
+        margin: 0.1rem 0.25rem;
+    }
+}
