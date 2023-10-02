@@ -5,6 +5,7 @@ Client side is being built using React.js
 Localy running MySQL server is used for a data storage
 
 Implemented functionalities:
+
 1. basic (insecure) user creation and login;
 2. question submition;
 3. aswer(s) submition;
@@ -12,4 +13,7 @@ Implemented functionalities:
 5. answer rating.
 
 Currently working on:
-- token based user authentification. 
+
+-   token based user authentification.
+
+updated in V 1.0.2: - improvements to user sign up

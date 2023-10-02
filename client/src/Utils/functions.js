@@ -8,7 +8,9 @@ const padTo2Digits = (num) => {
 
 export const getHoursAndMinutes = (unformatedTime) => {
     const date = new Date(unformatedTime);
-    return padTo2Digits(date.getHours()) + ':' + padTo2Digits(date.getMinutes());
+    return (
+        padTo2Digits(date.getHours()) + ':' + padTo2Digits(date.getMinutes())
+    );
 };
 
 export const getUserIdAndKey = () => {
