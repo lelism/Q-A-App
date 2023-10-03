@@ -56,13 +56,10 @@ const Registration = () => {
             apiData.method,
             body
         );
-        // console.log('registrationResponse: ', registrationResponse);
-        // const statusMessage = registrationResponse.status;
-        // console.log('status message: ', statusMessage);
-        registrationResponse.status === 'success'
-            ? alert('Registration successful')
-            : alert('Registration has failed');
-        // window.open('/', '_self');
+        alert(registrationResponse.message);
+        if (registrationResponse.status === 'success') {
+            window.open('/', '_self');
+        }
     };
 
     return (

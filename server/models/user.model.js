@@ -1,12 +1,13 @@
 const sql = require('../configDB/db');
-const mysql = require('mysql');
+const mysql = require('mysql2');
+const { createJsonResponse } = require('../utils/functions.js');
 
 const User = function (userData) {
     (this.username = userData.userName),
         (this.name = userData.name),
         (this.password = userData.password),
         (this.email = userData.email),
-        (this.avatar_id = 0);
+        (this.avatar_id = userData.avatarID || 0);
 };
 
 //sign up a new user
@@ -15,37 +16,55 @@ User.signUp = (newUserData, result) => {
     query = mysql.format(query, newUserData);
     sql.query(query, (err, res) => {
         if (err) {
-            console.log('error: ', err);
             result(err, null);
             return;
         }
-        console.log('New user registered succesfully: ', {
-            userId: res.insertId,
-            ...newUserData,
-        });
-        result(null, { status: 'success' });
+        if (res.warningStatus !== 0) {
+            console.error(`Warning during user (${res.insertId}) registration`);
+        }
+        result(
+            null,
+            createJsonResponse(
+                'success',
+                `${newUserData.username} user registration was succesful`
+            )
+        );
     });
 };
 
 //login a user
 User.login = (username, password, result) => {
-    let query = `SELECT user_id AS userId, session_key AS sessionKey 
+    let query = `
+        SELECT user_id AS userId, session_key AS sessionKey 
         FROM users 
         WHERE username = ? AND password = ?`;
     query = mysql.format(query, [username, password]);
     sql.query(query, (err, res) => {
         if (err) {
-            console.log('error: ', err);
             result(err, null);
             return;
         }
         if (res.length == 0) {
-            console.log('Username or password is incorrect');
             result(null, { userId: '', sessionKey: '' });
             return;
         }
-        console.log('Retrieved user credentials: ', res[0]);
-        result(null, res[0]);
+        return result(null, res[0]);
+    });
+};
+
+//updateToken
+User.updateToken = (username, password, token, result) => {
+    let query = `
+        UPDATE users SET session_key = ?, key_expires_on = (NOW() + INTERVAL 24 HOUR)
+        WHERE username = ? AND password = ?`;
+    query = mysql.format(query, [token, username, password]);
+    sql.query(query, (err, res) => {
+        if (err) {
+            console.error('error: ', err);
+            result(err, null);
+            return;
+        }
+        return result(null, res);
     });
 };
 

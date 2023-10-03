@@ -22,7 +22,7 @@ startAnswerRoutes(app);
 
 // Heartbeat route
 app.get('/version', (req, res) => {
-    res.status(200).json({ version: 'Q&A v1.0.2' });
+    res.status(200).json({ version: 'Q&A v1.0.3' });
 });
 
 app.listen(port, () => {

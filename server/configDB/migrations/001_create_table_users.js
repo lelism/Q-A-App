@@ -1,5 +1,4 @@
-const initUsersTable = 
-    `CREATE TABLE IF NOT EXISTS users(
+const initUsersTable = `CREATE TABLE IF NOT EXISTS users(
         user_id INT NOT NULL AUTO_INCREMENT,
         username VARCHAR(20) NOT NULL,
         name VARCHAR(30) NOT NULL,
@@ -9,7 +8,8 @@ const initUsersTable =
         last_login TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
         post_count INT DEFAULT 0,
         avatar_id INT DEFAULT 1,
-        session_key VARCHAR(20) DEFAULT '9876543210',
+        session_key TEXT,
+        key_expires_on DATETIME,
         PRIMARY KEY (user_id)
     )`;
 

@@ -16,4 +16,5 @@ Currently working on:
 
 -   token based user authentification.
 
-updated in V 1.0.2: - improvements to user sign up
+updated in V1.0.2: - improvements to user sign up
+updated in V1.0.3: - jwt token realised at server side
