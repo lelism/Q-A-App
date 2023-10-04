@@ -17,19 +17,21 @@ const Questions = ({ isLogged, userDetails }) => {
         {
             optionNo: 0,
             label: 'Publication date',
-            sortQueries: ['', 'published ASC', 'published DESC']
+            sortQueries: ['', 'published ASC', 'published DESC'],
         },
         {
             optionNo: 1,
             label: 'Total answers',
-            sortQueries: ['', 'answerCount ASC', 'answerCount DESC']
-        }
+            sortQueries: ['', 'answerCount ASC', 'answerCount DESC'],
+        },
     ];
 
     useEffect(() => {
         let condition = '';
         const rules = Object.values(sortRules);
-        rules.forEach((rule) => { condition += (rule !== '') ? (', ' + rule) : ''; });
+        rules.forEach((rule) => {
+            condition += rule !== '' ? ', ' + rule : '';
+        });
         if (condition.length) {
             condition = 'ORDER BY ' + condition.slice(2);
         }
@@ -38,13 +40,25 @@ const Questions = ({ isLogged, userDetails }) => {
 
     return (
         <>
-            <div className='questions-page full'>
-                <div className='questions-header'>
-                    <h1 className=''>All questions</h1>
-                    <span className='q-button' onClick={() => askQuestion(isLogged, setQuestionForm) }>Ask question</span>
+            <div className="questions-page full">
+                <div className="questions-header">
+                    <h1 className="">All questions</h1>
+                    <span
+                        className="q-button"
+                        onClick={() => askQuestion(isLogged, setQuestionForm)}
+                    >
+                        Ask question
+                    </span>
                 </div>
-                <div className='sorting-row'>
-                    <span className={`answer-button + ${filterEmpty && 'selected'}`} onClick={() => { setFilterEmpty(!filterEmpty); }}>
+                <div className="sorting-row">
+                    <span
+                        className={`answer-button + ${
+                            filterEmpty && 'selected'
+                        }`}
+                        onClick={() => {
+                            setFilterEmpty(!filterEmpty);
+                        }}
+                    >
                         Filter empty
                     </span>
                     <span>Sort by: </span>
@@ -52,15 +66,15 @@ const Questions = ({ isLogged, userDetails }) => {
                         return (
                             <SortSelector
                                 key={i}
-                                setSortRules={ setSortRules }
-                                sortOption={ option }
+                                setSortRules={setSortRules}
+                                sortOption={option}
                             />
                         );
                     })}
                 </div>
                 {questionsList.map((questionData, i) => {
-                    if ((questionData.answerCount === 0) && filterEmpty) {
-                        return (<></>);
+                    if (questionData.answerCount === 0 && filterEmpty) {
+                        return <></>;
                     } else {
                         return (
                             <Question
@@ -69,11 +83,18 @@ const Questions = ({ isLogged, userDetails }) => {
                                 userId={userDetails.userId}
                                 questionData={questionData}
                                 initResetQ={setResetQuestions}
-                            />);
+                            />
+                        );
                     }
                 })}
                 <span>
-                    {questionForm && <QuestionForm author={userDetails.userId} setForm={setQuestionForm} initReset={setResetQuestions} />}
+                    {questionForm && (
+                        <QuestionForm
+                            author={userDetails.userId}
+                            setForm={setQuestionForm}
+                            initReset={setResetQuestions}
+                        />
+                    )}
                 </span>
             </div>
         </>

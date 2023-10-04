@@ -19,14 +19,6 @@ export const getUserIdAndKey = () => {
     return { userId, sessionKey };
 };
 
-export const checkSession = () => {
-    const { userId, sessionKey } = getUserIdAndKey();
-    if (!userId || !sessionKey) {
-        return false;
-    }
-    return true;
-};
-
 export const askQuestion = (isLogged, setQuestionForm) => {
     if (!isLogged) {
         alert('You need to be logged in to ask a question.');

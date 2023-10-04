@@ -1,64 +1,64 @@
 const apiURLs = {
     userSignUp: {
         url: 'http://localhost:4000/users/signup',
-        method: 'POST'
+        method: 'POST',
     },
     userLogin: {
         url: 'http://localhost:4000/users/login',
-        method: 'POST'
+        method: 'POST',
     },
     getUserDetails: {
         url: 'http://localhost:4000/users/details',
-        method: 'POST'
+        method: 'POST',
     },
     submitNewQuestion: {
         url: 'http://localhost:4000/questions/new-question',
-        method: 'POST'
+        method: 'POST',
     },
     getQuestionsList: {
         url: 'http://localhost:4000/questions/receive-all',
-        method: 'POST'
+        method: 'POST',
     },
     deleteQuestion: {
         url: 'http://localhost:4000/questions/delete',
-        method: 'DELETE'
+        method: 'DELETE',
     },
     editQuestion: {
         url: 'http://localhost:4000/questions/update',
-        method: 'PATCH'
+        method: 'PATCH',
     },
     countAnswers: {
         url: 'http://localhost:4000/questions/count-answers/',
-        method: 'GET'
+        method: 'GET',
     },
     submitNewAnswer: {
         url: 'http://localhost:4000/answers/new-answer',
-        method: 'POST'
+        method: 'POST',
     },
     getAnswers: {
         url: 'http://localhost:4000/answers/get-answers?questionId=',
-        method: 'POST'
+        method: 'POST',
     },
     deleteAnswer: {
         url: 'http://localhost:4000/answers/delete',
-        method: 'DELETE'
+        method: 'DELETE',
     },
     editAnswer: {
         url: 'http://localhost:4000/answers/update',
-        method: 'PATCH'
+        method: 'PATCH',
     },
     isLiked: {
         url: 'http://localhost:4000/answers/isLiked',
-        method: 'POST'
+        method: 'POST',
     },
     submitLike: {
         url: 'http://localhost:4000/answers/like',
-        method: 'POST'
+        method: 'POST',
     },
     deleteLike: {
         url: 'http://localhost:4000/answers/delete-like',
-        method: 'DELETE'
-    }
+        method: 'DELETE',
+    },
 };
 
 export default apiURLs;

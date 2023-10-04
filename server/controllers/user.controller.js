@@ -30,7 +30,6 @@ exports.signUp = (req, res) => {
         }
 
         const newUser = new User(receivedUserData);
-
         User.signUp(newUser, (err, result) => {
             if (err) {
                 res.status(500).send(
@@ -65,10 +64,15 @@ exports.login = (req, res) => {
 
         User.login(username, password, (err, loginResult) => {
             if (err) {
-                if (err.kind === 'not_found') {
+                if (err.message === 'not_found') {
                     return res
                         .status(404)
-                        .send(createJsonResponse('fail', 'User was not found'));
+                        .send(
+                            createJsonResponse(
+                                'fail',
+                                'Incorrect username or password'
+                            )
+                        );
                 } else {
                     return res
                         .status(500)
@@ -81,33 +85,23 @@ exports.login = (req, res) => {
                         );
                 }
             } else {
+                const userId = loginResult.userId;
                 const token = createNewToken(jwt, username);
-                User.updateToken(
-                    username,
-                    password,
-                    token,
-                    (err, tokenResult) => {
-                        if (err || tokenResult.changedRows !== 1) {
-                            return res
-                                .status(500)
-                                .send(
-                                    createJsonResponse(
-                                        'fail',
-                                        'Authentification has failed'
-                                    )
-                                );
-                        }
+                User.updateToken(userId, token, (err, tokenResult) => {
+                    if (err || tokenResult.affectedRows !== 1) {
                         return res
-                            .status(200)
+                            .status(500)
                             .send(
                                 createJsonResponse(
-                                    'success',
-                                    token,
-                                    loginResult.userId
+                                    'fail',
+                                    'Authentification has failed'
                                 )
                             );
                     }
-                );
+                    return res
+                        .status(200)
+                        .send(createJsonResponse('success', token, userId));
+                });
             }
         });
     } catch (error) {
@@ -131,18 +125,29 @@ exports.getDetails = (req, res) => {
         User.getDetails(userId, sessionKey, (err, result) => {
             if (err) {
                 if (err.kind === 'not_found') {
-                    res.status(404).send({
-                        message: `User was not found`,
-                    });
+                    res.status(404).send(
+                        createJsonResponse('fail', 'User was not found')
+                    );
                 } else {
-                    res.status(500).send({
-                        message: err.message || 'Error during data collection',
-                    });
+                    res.status(500).send(
+                        createJsonResponse(
+                            'fail',
+                            'Error during data collection',
+                            reportError('UD', err)
+                        )
+                    );
                 }
             } else res.status(200).send(result);
         });
     } catch (error) {
-        console.error(error);
-        return res.status(400).send(error);
+        return res
+            .status(500)
+            .send(
+                createJsonResponse(
+                    'fail',
+                    'Error during data collection',
+                    reportError('UDX', err)
+                )
+            );
     }
 };

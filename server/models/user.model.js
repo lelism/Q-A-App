@@ -35,9 +35,10 @@ User.signUp = (newUserData, result) => {
 //login a user
 User.login = (username, password, result) => {
     let query = `
-        SELECT user_id AS userId, session_key AS sessionKey 
+        SELECT user_id AS userId 
         FROM users 
-        WHERE username = ? AND password = ?`;
+        WHERE username = ? AND password = ?
+    `;
     query = mysql.format(query, [username, password]);
     sql.query(query, (err, res) => {
         if (err) {
@@ -45,7 +46,7 @@ User.login = (username, password, result) => {
             return;
         }
         if (res.length == 0) {
-            result(null, { userId: '', sessionKey: '' });
+            result(new Error('not_found'), null);
             return;
         }
         return result(null, res[0]);
@@ -53,11 +54,25 @@ User.login = (username, password, result) => {
 };
 
 //updateToken
-User.updateToken = (username, password, token, result) => {
+User.updateToken = (userId, token, result) => {
     let query = `
-        UPDATE users SET session_key = ?, key_expires_on = (NOW() + INTERVAL 24 HOUR)
-        WHERE username = ? AND password = ?`;
-    query = mysql.format(query, [token, username, password]);
+        DELETE FROM session_keys 
+        WHERE key_expires_on < NOW() OR owner_id = ?
+    `;
+    query = mysql.format(query, [userId]);
+    sql.query(query, (err, res) => {
+        if (err) {
+            result(err, null);
+            return;
+        }
+    });
+
+    query = `
+        INSERT INTO session_keys
+        SET session_key = ?, owner_id = ?,
+        key_expires_on = (NOW() + INTERVAL 24 HOUR)
+    `;
+    query = mysql.format(query, [token, userId]);
     sql.query(query, (err, res) => {
         if (err) {
             console.error('error: ', err);
@@ -70,33 +85,34 @@ User.updateToken = (username, password, token, result) => {
 
 // return user details
 User.getDetails = (userId, sessionKey, result) => {
-    let query = `SELECT 
-      user_id AS userId, name, username, email, 
-      unix_timestamp(registration_date) * 1000 AS registrationDate, 
-      unix_timestamp(last_login) * 1000 AS lastLogin, post_count AS postCount, 
-      avatar_id as avatarId, session_key AS sessionKey
-    FROM users 
-    WHERE user_id = ?`;
-    query = mysql.format(query, [userId]);
+    let query = `
+        SELECT 
+            sk.owner_id AS userId, u.name, u.username, u.email, 
+            unix_timestamp(u.registration_date) * 1000 AS registrationDate, 
+            unix_timestamp(u.last_login) * 1000 AS lastLogin, 
+            u.post_count AS postCount, u.avatar_id as avatarId
+        FROM session_keys AS sk
+        LEFT JOIN users AS u
+        ON sk.owner_id = u.user_id
+        WHERE sk.owner_id = ? AND sk.session_key = ?
+    `;
+    query = mysql.format(query, [userId, sessionKey]);
     sql.query(query, (err, res) => {
         if (err) {
-            console.log('error: ', err);
             result(err, null);
             return;
         }
-        if (res.length == 0 || res[0].sessionKey !== sessionKey) {
-            console.log('Session was terminated, please repeat log in');
-            result(null, { userId: '', sessionKey: '' });
+        if (res.length === 0) {
+            result(
+                null,
+                createJsonResponse(
+                    'fail',
+                    'User session is not active. Please login.'
+                )
+            );
             return;
         }
-        console.log(
-            'Returned details for user: ' +
-                res[0].username +
-                ' (ID: ' +
-                res[0].userId +
-                ').'
-        );
-        result(null, res[0]);
+        result(null, { ...{ status: 'success' }, ...res[0] });
     });
 };
 

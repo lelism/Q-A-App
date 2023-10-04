@@ -7,7 +7,6 @@ import Registration from './Pages/Registration/Registration';
 import Sidebar from './Components/Sidebar/Sidebar';
 import UserSection from './Components/UserSection/UserSection';
 import { refreshUserData } from './Utils/api';
-import { checkSession } from './Utils/functions';
 import Answers from './Pages/Answers';
 import IconAws from './Components/IconAws';
 import NotFound from './Pages/NotFound/NotFound';
@@ -17,11 +16,7 @@ function App() {
     const [userData, setUserData] = useState({});
 
     useEffect(() => {
-        checkSession() ? setIsLogged(true) : setIsLogged(false);
-    }, []);
-
-    useEffect(() => {
-        refreshUserData(isLogged, userData, setUserData);
+        refreshUserData(setIsLogged, setUserData);
     }, [isLogged]);
 
     return (

@@ -7,58 +7,75 @@ export const fetchAPI = async (url, apiMethod, bodyData) => {
             method: `${apiMethod}`,
             mode: 'cors',
             headers: {
-                'Content-type': 'application/json; charset=UTF-8'
-            }
+                'Content-type': 'application/json; charset=UTF-8',
+            },
         };
 
         if (options.method !== 'GET' && bodyData) {
             options.body = JSON.stringify(bodyData);
-        };
+        }
 
         const response = await fetch(url, options);
         if (response instanceof Error) {
-            return (new Error('Data fetch has failled'));
+            return new Error('Data fetch has failled');
         } else return response.json();
     } catch (error) {
         return error;
     }
 };
 
-export const refreshUserData = async (isLogged, userData, setUserData) => {
-    const apiData = apiURLs.getUserDetails;
-    if (isLogged) {
-        const body = getUserIdAndKey();
-        if (!body.userId || !body.sessionKey) {
+export const refreshUserData = async (setIsLogged, setUserData) => {
+    const userInfo = getUserIdAndKey();
+    if (userInfo.userId && userInfo.sessionKey) {
+        const userDetailsAPI = apiURLs.getUserDetails;
+        const fetchData = await fetchAPI(
+            userDetailsAPI.url,
+            userDetailsAPI.method,
+            userInfo
+        );
+
+        if ((await fetchData.status) === 'success') {
+            setUserData(fetchData);
+            setIsLogged(true);
+        } else {
             sessionStorage.clear();
-            alert('Session was terminated, please login again');
             setUserData({});
-            return;
+            alert('Session was terminated, please login again');
+            setIsLogged(false);
         }
-        const fetchData = await fetchAPI(apiData.url, apiData.method, body);
-        await setUserData(fetchData);
-    } else setUserData({});
+    } else {
+        sessionStorage.clear();
+        setUserData({});
+        setIsLogged(false);
+    }
 };
 
 export const getQuestionsList = async (setQuestionsList, condition) => {
     const apiData = apiURLs.getQuestionsList;
-    const body = (condition === '') ? {} : { condition };
+    const body = condition === '' ? {} : { condition };
     let fetchData = await fetchAPI(apiData.url, apiData.method, body);
     // await setQuestionsList(() => fetchData);
-    console.log(fetchData);
+    // console.log(fetchData);
     if ('Server message' in fetchData) {
-        fetchData = [{
-            title: 'Test title',
-            body: 'test body',
-            authorId: 1
-        }];
-    };
+        fetchData = [
+            {
+                title: 'Test title',
+                body: 'test body',
+                authorId: 1,
+            },
+        ];
+    }
     await setQuestionsList(() => fetchData);
 };
 
 export const getAnswersList = async (setAnswersList, questionId, condition) => {
     const apiData = apiURLs.getAnswers;
-    const body = (condition === '') ? {} : { condition };
-    const fetchData = await fetchAPI(apiData.url + questionId, apiData.method, body);
+    const body = condition === '' ? {} : { condition };
+    const fetchData = await fetchAPI(
+        apiData.url + questionId,
+        apiData.method,
+        body
+    );
     await setAnswersList(() => fetchData);
 };
 
@@ -72,7 +89,7 @@ export const checkIfLiked = async (userId, answerId, setIsLiked) => {
     const apiData = apiURLs.isLiked;
     const body = { userId, answerId };
     const fetchData = await fetchAPI(apiData.url, apiData.method, body);
-    const checkResult = await (fetchData.success) ? fetchData.isLiked : false;
+    const checkResult = (await fetchData.success) ? fetchData.isLiked : false;
     await setIsLiked(checkResult);
 };
 
