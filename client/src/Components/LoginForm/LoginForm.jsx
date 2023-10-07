@@ -21,15 +21,18 @@ const LoginForm = () => {
             alert('Check your credentials');
             return;
         }
-        const body = { username: inputs.username, password: inputs.password };
-        const credentials = await fetchAPI(loginAPI.url, loginAPI.method, body);
-        console.log(credentials);
+        const userData = {
+            username: inputs.username,
+            password: inputs.password,
+        };
+        const credentials = await fetchAPI(loginAPI.url, loginAPI.method, {
+            body: userData,
+        });
         if (credentials.status === 'success') {
             sessionStorage.setItem('userId', credentials.reference || '');
             sessionStorage.setItem('sessionKey', credentials.message || '');
         } else {
-            sessionStorage.setItem('userId', '');
-            sessionStorage.setItem('sessionKey', '');
+            sessionStorage.clear();
             alert(credentials.message);
         }
         location.reload();

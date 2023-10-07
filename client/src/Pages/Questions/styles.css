@@ -9,7 +9,7 @@
     align-items: center;
     justify-content: space-between;
     padding: 1rem 0rem;
-    border-bottom: 3px solid #FFFFFF;
+    border-bottom: 3px solid #ffffff;
 }
 
 .selected {
@@ -17,9 +17,9 @@
     color: var(--white);
 }
 
-.sorting-row {
+/* .sorting-row {
     padding: 0.1rem 0rem 1rem;
-}
+} */
 
 .q-button {
     min-width: 100px;

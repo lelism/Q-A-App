@@ -1,7 +1,7 @@
 import apiURLs from './urls';
 import { getUserIdAndKey } from './functions';
 
-export const fetchAPI = async (url, apiMethod, bodyData) => {
+export const fetchAPI = async (apiURL, apiMethod, apiData) => {
     try {
         const options = {
             method: `${apiMethod}`,
@@ -11,11 +11,18 @@ export const fetchAPI = async (url, apiMethod, bodyData) => {
             },
         };
 
-        if (options.method !== 'GET' && bodyData) {
-            options.body = JSON.stringify(bodyData);
+        if (options.method !== 'GET') {
+            if (apiData.headers) {
+                options.headers = {
+                    ...options.headers,
+                    ...apiData.headers,
+                };
+            }
+            if (apiData.body) options.body = JSON.stringify(apiData.body);
         }
-
-        const response = await fetch(url, options);
+        // console.log('options');
+        // console.log(options);
+        const response = await fetch(apiURL, options);
         if (response instanceof Error) {
             return new Error('Data fetch has failled');
         } else return response.json();
@@ -31,16 +38,15 @@ export const refreshUserData = async (setIsLogged, setUserData) => {
         const fetchData = await fetchAPI(
             userDetailsAPI.url,
             userDetailsAPI.method,
-            userInfo
+            { body: userInfo }
         );
-
         if ((await fetchData.status) === 'success') {
             setUserData(fetchData);
             setIsLogged(true);
         } else {
+            alert('Session was terminated, please login again');
             sessionStorage.clear();
             setUserData({});
-            alert('Session was terminated, please login again');
             setIsLogged(false);
         }
     } else {
@@ -51,31 +57,22 @@ export const refreshUserData = async (setIsLogged, setUserData) => {
 };
 
 export const getQuestionsList = async (setQuestionsList, condition) => {
-    const apiData = apiURLs.getQuestionsList;
+    const getQuestionsAPI = apiURLs.getQuestionsList;
     const body = condition === '' ? {} : { condition };
-    let fetchData = await fetchAPI(apiData.url, apiData.method, body);
-    // await setQuestionsList(() => fetchData);
-    // console.log(fetchData);
-    if ('Server message' in fetchData) {
-        fetchData = [
-            {
-                title: 'Test title',
-                body: 'test body',
-                authorId: 1,
-            },
-        ];
-    }
+    const fetchData = await fetchAPI(
+        getQuestionsAPI.url,
+        getQuestionsAPI.method,
+        { body }
+    );
     await setQuestionsList(() => fetchData);
 };
 
 export const getAnswersList = async (setAnswersList, questionId, condition) => {
     const apiData = apiURLs.getAnswers;
     const body = condition === '' ? {} : { condition };
-    const fetchData = await fetchAPI(
-        apiData.url + questionId,
-        apiData.method,
-        body
-    );
+    const fetchData = await fetchAPI(apiData.url + questionId, apiData.method, {
+        body,
+    });
     await setAnswersList(() => fetchData);
 };
 

@@ -32,10 +32,12 @@ function reportError(location, errorInfo) {
     return errorRef;
 }
 
+// todo: check necessity
 function randomMaxInt(maxNumber) {
     return 1 + Math.floor(Math.random() * maxNumber);
 }
 
+// todo check necessity
 function randomMaxFloat(maxNumber) {
     return Number((Math.random() * maxNumber).toFixed(2));
 }

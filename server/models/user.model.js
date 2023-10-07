@@ -116,4 +116,30 @@ User.getDetails = (userId, sessionKey, result) => {
     });
 };
 
+// Validate user
+User.validateUser = (userId, token, result) => {
+    let query = `
+        DELETE FROM session_keys
+        WHERE key_expires_on < NOW()
+        `;
+    query = mysql.format(query, [userId]);
+    sql.query(query, (err, res) => {
+        if (err) {
+            return result({ status: 'fail' });
+        }
+    });
+
+    query = `
+        SELECT *
+        FROM session_keys
+        WHERE owner_id = ? AND session_key = ?`;
+    query = mysql.format(query, [userId, token]);
+
+    sql.query(query, (err, res) => {
+        if (err || res.length !== 1) {
+            return result({ status: 'fail' });
+        } else return result({ status: 'success' });
+    });
+};
+
 module.exports = User;

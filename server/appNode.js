@@ -10,7 +10,14 @@ const port = process.env.PORT || 4000;
 const app = express();
 app.use(express.json());
 app.use(cors());
-// app.use(cors({ origin: '*' }));
+
+const corsOptions = {
+    origin: '*',
+    credentials: true,
+    optionSuccessStatus: 200,
+};
+
+app.use(cors(corsOptions));
 
 const { startUserRoutes } = require('./routes/user.routes.js');
 const { startQuestionRoutes } = require('../server/routes/question.routes.js');
@@ -22,7 +29,7 @@ startAnswerRoutes(app);
 
 // Heartbeat route
 app.get('/version', (req, res) => {
-    res.status(200).json({ version: 'Q&A v1.0.3' });
+    res.status(200).json({ version: 'Q&A v1.0.4' });
 });
 
 app.listen(port, () => {

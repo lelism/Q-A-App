@@ -2,9 +2,8 @@ import React, { useEffect, useState } from 'react';
 import './styles.css';
 import QuestionForm from '../../Components/QuestionForm';
 import { getQuestionsList } from '../../Utils/api';
-import Question from '../../Components/Question';
-import SortSelector from '../../Components/SortSelector/SortSelector';
 import { askQuestion } from '../../Utils/functions';
+import QuestionsTable from '../../Components/QuestionsTable';
 
 const Questions = ({ isLogged, userDetails }) => {
     const [questionForm, setQuestionForm] = useState(false);
@@ -13,24 +12,12 @@ const Questions = ({ isLogged, userDetails }) => {
     const [filterEmpty, setFilterEmpty] = useState(false);
     const [resetQuestions, setResetQuestions] = useState(false);
 
-    const sortOptions = [
-        {
-            optionNo: 0,
-            label: 'Publication date',
-            sortQueries: ['', 'published ASC', 'published DESC'],
-        },
-        {
-            optionNo: 1,
-            label: 'Total answers',
-            sortQueries: ['', 'answerCount ASC', 'answerCount DESC'],
-        },
-    ];
-
     useEffect(() => {
+        console.log(userDetails);
         let condition = '';
         const rules = Object.values(sortRules);
         rules.forEach((rule) => {
-            condition += rule !== '' ? ', ' + rule : '';
+            rule !== '' ? (condition += ', ' + rule) : (condition += '');
         });
         if (condition.length) {
             condition = 'ORDER BY ' + condition.slice(2);
@@ -50,47 +37,29 @@ const Questions = ({ isLogged, userDetails }) => {
                         Ask question
                     </span>
                 </div>
-                <div className="sorting-row">
-                    <span
-                        className={`answer-button + ${
-                            filterEmpty && 'selected'
-                        }`}
-                        onClick={() => {
-                            setFilterEmpty(!filterEmpty);
-                        }}
-                    >
-                        Filter empty
-                    </span>
-                    <span>Sort by: </span>
-                    {sortOptions.map((option, i) => {
-                        return (
-                            <SortSelector
-                                key={i}
-                                setSortRules={setSortRules}
-                                sortOption={option}
-                            />
-                        );
-                    })}
-                </div>
-                {questionsList.map((questionData, i) => {
-                    if (questionData.answerCount === 0 && filterEmpty) {
-                        return <></>;
-                    } else {
-                        return (
-                            <Question
-                                key={i}
-                                unlocked={isLogged}
-                                userId={userDetails.userId}
-                                questionData={questionData}
-                                initResetQ={setResetQuestions}
-                            />
-                        );
-                    }
-                })}
+
+                {questionsList.status === 'fail' && (
+                    <div className="flex-col-c">
+                        <h2>Sorry, there is nothing to be displayed:</h2>
+                        <br></br>
+                        <h3>{questionsList.message}</h3>
+                    </div>
+                )}
+
+                {questionsList.length && (
+                    <QuestionsTable
+                        unlocked={isLogged}
+                        userId={userDetails.userId}
+                        setResetQuestions={setResetQuestions}
+                        setSortRules={setSortRules}
+                        filterEmpty={filterEmpty}
+                        setFilterEmpty={setFilterEmpty}
+                        questionsList={questionsList}
+                    />
+                )}
                 <span>
                     {questionForm && (
                         <QuestionForm
-                            author={userDetails.userId}
                             setForm={setQuestionForm}
                             initReset={setResetQuestions}
                         />
