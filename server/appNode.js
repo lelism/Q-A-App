@@ -22,6 +22,7 @@ app.use(cors(corsOptions));
 const { startUserRoutes } = require('./routes/user.routes.js');
 const { startQuestionRoutes } = require('../server/routes/question.routes.js');
 const { startAnswerRoutes } = require('../server/routes/answer.routes.js');
+const { verifyToken } = require('./utils/functions');
 
 startUserRoutes(app);
 startQuestionRoutes(app);
@@ -29,6 +30,8 @@ startAnswerRoutes(app);
 
 // Heartbeat route
 app.get('/version', (req, res) => {
+    console.log(verifyToken(req.headers['token']));
+    console.log('praejo');
     res.status(200).json({ version: 'Q&A v1.0.4' });
 });
 

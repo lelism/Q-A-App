@@ -3,7 +3,7 @@ tableQueries.users = require('./migrations/001_create_table_users');
 tableQueries.questions = require('./migrations/002_create_table_questions');
 tableQueries.answers = require('./migrations/003_create_table_answers');
 tableQueries.likes = require('./migrations/004_create_table_likes');
-tableQueries.keys = require('./migrations/005_create_table_session_keys');
+// tableQueries.keys = require('./migrations/005_create_table_session_keys');
 
 const selectDB = (connection, DBname) => {
     try {

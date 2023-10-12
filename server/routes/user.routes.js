@@ -6,7 +6,7 @@ const startUserRoutes = (app) => {
 
     router.post('/signup', users.signUp);
     router.post('/login', users.login);
-    router.post('/details', users.getDetails);
+    router.get('/details', users.getDetails);
 
     app.use('/users', router);
 };

@@ -19,3 +19,4 @@ Currently working on:
 updated in V1.0.2: - improvements to user sign up
 updated in V1.0.3: - jwt token realised at server side
 updated in v1.0.4: - token addition to the question upload
+updated in v1.0.5: - reviewed user controller and modules

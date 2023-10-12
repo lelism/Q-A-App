@@ -32,7 +32,7 @@ const QuestionForm = ({ setForm, initReset }) => {
             authorId: userData.userId,
         };
         options.headers = {
-            Authorization: userData.sessionKey,
+            token: userData.sessionKey,
         };
 
         const newQuestion = await fetchAPI(
